@@ -1,25 +1,23 @@
-import { Query, Resolver } from "type-graphql";
-import { User } from "../schema/user.schema";
-import UserService from "../service/user.service";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
+
+import UserService from "../service/user.service.js";
+import { User } from "../schema/user.schema.js";
+import { RegisterInput } from "../types/inputs/user.input.js";
 
 @Resolver(User)
 class UserResolver {
-  //constructor(private userService: UserService) {} //TODO: Add MongoDB
-  private usersCollection: User[] = [
-    {
-      _id: "1",
-      name: "John Doe",
-      picture: "http://example.com/john.jpg",
-      email: "johndoe@example.com",
-      isEmailVerified: true,
-      password: "hashedpassword123",
-      role: "APPLICATION_USER",
-    },
-  ];
+  constructor(private userService: UserService) {
+    this.userService = new UserService();
+  }
 
   @Query(() => [User])
   users() {
-    return this.usersCollection;
+    return this.userService.findAll();
+  }
+
+  @Mutation(() => User)
+  register(@Arg("input") input: RegisterInput) {
+    return this.userService.register(input);
   }
 }
 

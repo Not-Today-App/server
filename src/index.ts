@@ -6,62 +6,9 @@ import http from "http";
 import cors from "cors";
 import express from "express";
 import MyContext from "./types/myContext";
-import {
-  buildSchema,
-  Field,
-  ID,
-  ObjectType,
-  Query,
-  Resolver,
-} from "type-graphql";
-/* import UserResolver from "./resolver/user.resolver"; */
-import { MaxLength } from "class-validator";
-/* import { User } from "./schema/user.schema"; */
-
-@ObjectType()
-export class User {
-  @Field(() => ID)
-  _id: string;
-
-  @Field()
-  @MaxLength(30)
-  name: string;
-
-  @Field({ nullable: true })
-  picture?: string;
-
-  @Field()
-  email: string;
-
-  //TODO default false
-  //Avoid @Type for sensitive data
-  isEmailVerified: boolean;
-
-  password: string;
-
-  role: string; //TODO: ENUM -> APPLICATION_USER, SUPER_ADMIN
-}
-
-@Resolver(User)
-class UserResolver {
-  //constructor(private userService: UserService) {} //TODO: Add MongoDB
-  private usersCollection: User[] = [
-    {
-      _id: "1",
-      name: "John Doe",
-      picture: "http://example.com/john.jpg",
-      email: "johndoe@example.com",
-      isEmailVerified: true,
-      password: "hashedpassword123",
-      role: "APPLICATION_USER",
-    },
-  ];
-
-  @Query(() => [User])
-  users() {
-    return this.usersCollection;
-  }
-}
+import { buildSchema } from "type-graphql";
+import UserResolver from "./resolver/user.resolver.js";
+import { connectToMongo } from "./utils/mongo.js";
 
 async function bootstrap() {
   const schema = await buildSchema({
@@ -96,6 +43,8 @@ async function bootstrap() {
     httpServer.listen({ port: 4000 }, resolve)
   );
   console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+
+  connectToMongo();
 }
 
 bootstrap();
