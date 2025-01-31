@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-// TODO: import { User } from "../schema/user.schema";
+import { User } from "../schema/user.schema";
 
 interface MyContext {
-  //TODO: user: User | null;
-  token?: string;
+  req: Request;
+  res: Response;
+  user?: Partial<User>;
 }
 
 export default MyContext;

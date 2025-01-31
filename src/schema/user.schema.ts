@@ -3,7 +3,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses.js";
 import { Field, ID, ObjectType } from "type-graphql";
 import bcrypt from "bcrypt";
 
-enum Roles {
+export enum UserRoles {
   APPLICATION_USER = "APPLICATION_USER",
   SUPER_ADMIN = "SUPER_ADMIN",
 }
@@ -41,7 +41,7 @@ export class User extends TimeStamps {
   @prop({ required: true, minlength: 8, maxlength: 30 })
   password: string;
 
-  @prop({ enum: Roles, default: Roles.APPLICATION_USER })
+  @prop({ enum: UserRoles, default: UserRoles.APPLICATION_USER })
   role: string;
 
   static async comparePassword(

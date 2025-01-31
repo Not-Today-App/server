@@ -1,5 +1,6 @@
 import { User, UserModel } from "../schema/user.schema.js";
 import { LoginInput, RegisterInput } from "../types/inputs/user.input.js";
+import MyContext from "../types/myContext.js";
 import { Assert } from "../utils/assert.js";
 import { AppErrors } from "../utils/custom_error.js";
 import { signJwt } from "../utils/jwt.js";
@@ -18,7 +19,7 @@ class UserService {
     return UserModel.create(input);
   }
 
-  async login(input: LoginInput) {
+  async login(input: LoginInput, context: MyContext) {
     const e = "Invalid email or password";
 
     const user = await this.findByEmail(input.email);

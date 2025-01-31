@@ -7,12 +7,16 @@ import cors from "cors";
 import express from "express";
 import MyContext from "./types/myContext";
 import { buildSchema } from "type-graphql";
+import { authChecker } from "./utils/auth_checker.js";
 import UserResolver from "./resolver/user.resolver.js";
 import { connectToMongo } from "./utils/mongo.js";
+import { verifyJwt } from "./utils/jwt.js";
+import { User } from "./schema/user.schema";
 
 async function bootstrap() {
   const schema = await buildSchema({
     resolvers: [UserResolver],
+    authChecker,
     validate: true, // Enable 'class-validator'
   });
 
@@ -34,7 +38,17 @@ async function bootstrap() {
     cors<cors.CorsRequest>(),
     express.json(),
     expressMiddleware(server, {
-      context: async ({ req }) => ({ token: req.headers.token }),
+      context: async (ctx: MyContext) => {
+        const token = ctx.req.headers.authorization;
+
+        if (token) {
+          const tokenValue = token.replace("Bearer ", "").trim();
+          const user = verifyJwt<User>(tokenValue);
+          ctx.user = user;
+        }
+
+        return ctx;
+      },
     })
   );
 
