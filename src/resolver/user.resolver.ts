@@ -2,7 +2,7 @@ import { Arg, Mutation, Query, Resolver } from "type-graphql";
 
 import UserService from "../service/user.service.js";
 import { User } from "../schema/user.schema.js";
-import { RegisterInput } from "../types/inputs/user.input.js";
+import { LoginInput, RegisterInput } from "../types/inputs/user.input.js";
 
 @Resolver(User)
 class UserResolver {
@@ -18,6 +18,11 @@ class UserResolver {
   @Mutation(() => User)
   register(@Arg("input") input: RegisterInput) {
     return this.userService.register(input);
+  }
+
+  @Mutation(() => String!) // jwt
+  login(@Arg("input") input: LoginInput) {
+    return this.userService.login(input);
   }
 }
 
