@@ -1,7 +1,15 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 
 import UserService from "../service/user.service.js";
-import { User, UserModel, UserRoles } from "../schema/user.schema.js";
+import { User, UserModel } from "../schema/user.schema.js";
 import { LoginInput, RegisterInput } from "../types/inputs/user.input.js";
 import MyContext from "../types/myContext.js";
 import { Assert } from "../utils/assert.js";
@@ -13,19 +21,12 @@ class UserResolver {
     this.userService = new UserService();
   }
 
-  @Query(() => [User]!)
+  // QUERIES ------------------------------------------------------------
+
+  // TODO: Paginated users
+  @Query(() => [User])
   users() {
     return this.userService.findAll();
-  }
-
-  @Mutation(() => User!)
-  register(@Arg("input") input: RegisterInput) {
-    return this.userService.register(input);
-  }
-
-  @Mutation(() => String!) // jwt
-  login(@Arg("input") input: LoginInput, @Ctx() context: MyContext) {
-    return this.userService.login(input, context);
   }
 
   @Authorized()
@@ -35,6 +36,28 @@ class UserResolver {
     Assert.isTrue(!!user, "User not found", AppErrors.USER_NOT_FOUND);
     return user;
   }
+
+  //TODO: Users Count
+  @Query(() => Int)
+  countUsers() {
+    return this.userService.count();
+  }
+
+  // MUTATIONS ------------------------------------------------------------
+
+  @Mutation(() => User)
+  register(@Arg("input") input: RegisterInput) {
+    return this.userService.register(input);
+  }
+
+  @Mutation(() => String) // jwt
+  login(@Arg("input") input: LoginInput, @Ctx() context: MyContext) {
+    return this.userService.login(input, context);
+  }
+
+  //TODO: deleteMe @Authorized
+  //TODO: resetPassword(newPassword)
+  //TODO: verifyEmail - through email button
 }
 
 export default UserResolver;

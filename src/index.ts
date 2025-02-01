@@ -5,17 +5,18 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import http from "http";
 import cors from "cors";
 import express from "express";
-import MyContext from "./types/myContext";
+import MyContext from "./types/myContext.js";
 import { buildSchema } from "type-graphql";
 import { authChecker } from "./utils/auth_checker.js";
 import UserResolver from "./resolver/user.resolver.js";
 import { connectToMongo } from "./utils/mongo.js";
 import { verifyJwt } from "./utils/jwt.js";
-import { User } from "./schema/user.schema";
+import { User } from "./schema/user.schema.js";
+import DiaryResolver from "./resolver/diary.resolver.js";
 
 async function bootstrap() {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, DiaryResolver],
     authChecker,
     validate: true, // Enable 'class-validator'
   });

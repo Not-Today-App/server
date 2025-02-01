@@ -42,7 +42,7 @@ export class User extends TimeStamps {
   password: string;
 
   @prop({ enum: UserRoles, default: UserRoles.APPLICATION_USER })
-  role: string;
+  role: UserRoles;
 
   static async comparePassword(
     plainPassword: string,

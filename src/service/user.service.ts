@@ -7,7 +7,7 @@ import { signJwt } from "../utils/jwt.js";
 
 class UserService {
   async register(input: RegisterInput) {
-    const existingUser = await UserModel.findOne({ email: input.email }).exec();
+    const existingUser = await UserModel.exists({ email: input.email }).exec();
 
     Assert.isFalse(
       !!existingUser,
@@ -40,6 +40,8 @@ class UserService {
     const token = signJwt(payload);
 
     return token;
+
+    //TODO: Cookies
   }
 
   async findByEmail(email: string) {
@@ -48,6 +50,10 @@ class UserService {
 
   async findAll() {
     return UserModel.find().lean();
+  }
+
+  async count() {
+    return UserModel.estimatedDocumentCount();
   }
 }
 
