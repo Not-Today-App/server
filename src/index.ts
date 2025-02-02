@@ -13,10 +13,12 @@ import { connectToMongo } from "./utils/mongo.js";
 import { verifyJwt } from "./utils/jwt.js";
 import { User } from "./schema/user.schema.js";
 import DiaryResolver from "./resolver/diary.resolver.js";
+import { prepopulateLevels } from "./utils/pre_populate.js";
+import LevelResolver from "./resolver/level.resolver.js";
 
 async function bootstrap() {
   const schema = await buildSchema({
-    resolvers: [UserResolver, DiaryResolver],
+    resolvers: [UserResolver, DiaryResolver, LevelResolver],
     authChecker,
     validate: true, // Enable 'class-validator'
   });
@@ -60,6 +62,7 @@ async function bootstrap() {
   console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 
   connectToMongo();
+  prepopulateLevels();
 }
 
 bootstrap();

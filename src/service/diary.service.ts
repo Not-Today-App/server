@@ -1,4 +1,4 @@
-import { Diary, DiaryModel, DiaryMood } from "../schema/diary.schema.js";
+import { DiaryModel, DiaryMood } from "../schema/diary.schema.js";
 import {
   CreateDiaryInput,
   DeleteDiaryInput,

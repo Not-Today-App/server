@@ -10,6 +10,7 @@ export enum AppErrors {
   "SAME_DAY_DIARY" = "SAME_DAY_DIARY",
   "DIARY_NOT_FOUND" = "DIARY_NOT_FOUND",
   "INVALID_MOOD" = "INVALID_MOOD",
+  "INVALID_LEVEL" = "INVALID_LEVEL",
 }
 
 export class AppError extends GraphQLError {
