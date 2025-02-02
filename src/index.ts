@@ -8,17 +8,18 @@ import express from "express";
 import MyContext from "./types/myContext.js";
 import { buildSchema } from "type-graphql";
 import { authChecker } from "./utils/auth_checker.js";
-import UserResolver from "./resolver/user.resolver.js";
 import { connectToMongo } from "./utils/mongo.js";
 import { verifyJwt } from "./utils/jwt.js";
 import { User } from "./schema/user.schema.js";
-import DiaryResolver from "./resolver/diary.resolver.js";
-import { prepopulateLevels } from "./utils/pre_populate.js";
-import LevelResolver from "./resolver/level.resolver.js";
+import {
+  prepopulateAddictions,
+  prepopulateLevels,
+} from "./utils/pre_populate.js";
+import { resolvers } from "./resolver/index.js";
 
 async function bootstrap() {
   const schema = await buildSchema({
-    resolvers: [UserResolver, DiaryResolver, LevelResolver],
+    resolvers,
     authChecker,
     validate: true, // Enable 'class-validator'
   });
@@ -63,6 +64,7 @@ async function bootstrap() {
 
   connectToMongo();
   prepopulateLevels();
+  prepopulateAddictions();
 }
 
 bootstrap();

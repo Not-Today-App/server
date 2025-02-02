@@ -30,7 +30,9 @@ export class Level {
 
   @Field(() => Int)
   @prop({ required: true })
-  target_duration: number; // Days: 0d, 7d, 14d, 30d, 90d, 180d, 365d
+  targetDuration: number; // Days: 0d, 7d, 14d, 30d, 90d, 180d, 365d
 }
 
 export const LevelModel = getModelForClass(Level);
+
+export type LevelType = InstanceType<typeof LevelModel>; // for data folder
