@@ -38,7 +38,7 @@ class DiaryService {
 
     const diaryExists = await DiaryModel.exists(diaryInput);
 
-    Assert.isTrue(!!diaryExists, "Diary not found", AppErrors.DIARY_NOT_FOUND);
+    Assert.isTrue(!!diaryExists, "diary not found", AppErrors.DIARY_NOT_FOUND);
 
     const updatedDiary = await DiaryModel.findByIdAndUpdate(
       diaryInput,
@@ -58,7 +58,7 @@ class DiaryService {
 
     await DiaryModel.findOneAndDelete(diaryInput).lean();
 
-    return "Diary deleted";
+    return "diary deleted";
   }
 }
 

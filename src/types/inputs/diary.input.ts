@@ -30,12 +30,12 @@ export class UpdateDiaryInput {
   @Field()
   _id: string;
 
-  @Field({ nullable: true })
   @MaxLength(30, { message: MaxLengthValidationMsg })
+  @Field({ nullable: true })
   title?: string;
 
-  @Field({ nullable: true })
   @MaxLength(255, { message: MaxLengthValidationMsg })
+  @Field({ nullable: true })
   content?: string;
 
   @Field(() => DiaryMood, { nullable: true })

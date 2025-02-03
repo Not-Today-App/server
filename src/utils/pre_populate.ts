@@ -10,19 +10,20 @@ import { levelsData } from "../data/level.data.js";
 import { AddictionModel } from "../schema/addiction.schema.js";
 import { LevelModel } from "../schema/level.schema.js";
 
-async function prepopulateCollection(model, data) {
-  const isCollectionEmpty = (await model.countDocuments()) === 0;
+export async function prepopulateLevels() {
+  const isCollectionEmpty = (await LevelModel.countDocuments()) === 0;
 
   if (isCollectionEmpty) {
-    await model.insertMany(data);
-    console.log(`${model.modelName} prepopulated successfully!`);
+    await LevelModel.insertMany(levelsData);
+    console.log("Levels prepopulated successfully!");
   }
 }
 
-export async function prepopulateLevels() {
-  await prepopulateCollection(LevelModel, levelsData);
-}
-
 export async function prepopulateAddictions() {
-  await prepopulateCollection(AddictionModel, addictionsData);
+  const isCollectionEmpty = (await AddictionModel.countDocuments()) === 0;
+
+  if (isCollectionEmpty) {
+    await AddictionModel.insertMany(addictionsData);
+    console.log("Addictions prepopulated successfully!");
+  }
 }

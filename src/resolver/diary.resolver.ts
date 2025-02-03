@@ -29,7 +29,7 @@ class DiaryResolver {
     return this.diaryService.findById(input, context);
   }
 
-  // MUTATIONS ------------------------------------------------------------
+  // MUTATIONS -----------------------------------------------------------
 
   @Mutation(() => Diary)
   async createDiary(

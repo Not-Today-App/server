@@ -39,7 +39,7 @@ export class Addiction {
   _id: string;
 
   @Field(() => AddictionName)
-  @prop({ enum: AddictionName, required: true })
+  @prop({ enum: AddictionName, required: true, unique: true })
   name: AddictionName;
 
   @Field(() => [String])
