@@ -37,11 +37,15 @@ class UserResolver {
     return user;
   }
 
-  //TODO: Users Count
   @Query(() => Int)
   countUsers() {
     return this.userService.count();
   }
+
+  /*  @Query()
+  verifyEmail() {
+    return this.userService.verifyEmail();
+  } */
 
   // MUTATIONS ------------------------------------------------------------
 

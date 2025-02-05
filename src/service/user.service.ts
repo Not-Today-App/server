@@ -4,6 +4,10 @@ import MyContext from "../types/myContext.js";
 import { Assert } from "../utils/assert.js";
 import { AppErrors } from "../utils/custom_error.js";
 import { signJwt } from "../utils/jwt.js";
+import { getTransport } from "../mail/transport.js";
+import { generateVerificationEmail } from "../mail/verify_account.js";
+import nodemailer from "nodemailer";
+import { config } from "../utils/env_loader.js";
 
 class UserService {
   async register(input: RegisterInput) {
@@ -16,7 +20,22 @@ class UserService {
       input.email
     );
 
+    const transport = await getTransport();
+
+    const mailOptions = generateVerificationEmail({
+      username: input.username,
+      email: input.email,
+    });
+
+    transport.sendMail(mailOptions).then((info) => {
+      config.NODE_ENV === "development" &&
+        console.log(`URL: ${nodemailer.getTestMessageUrl(info)}`);
+    });
     return UserModel.create(input);
+  }
+
+  async verifyEmail(context: MyContext) {
+    this.findByEmail(context.user.email);
   }
 
   async login(input: LoginInput, context: MyContext) {
@@ -32,6 +51,12 @@ class UserService {
       AppErrors.INVALID_CREDENTIALS
     );
 
+    Assert.isTrue(
+      user.isEmailVerified,
+      "Please verify your email",
+      AppErrors.EMAIL_NOT_VERIFIED
+    );
+
     const payload = {
       _id: user._id,
       role: user.role,
@@ -41,7 +66,7 @@ class UserService {
 
     return token;
 
-    //TODO: Cookies
+    //TODO: Cookies I will need context for that
   }
 
   async findByEmail(email: string) {
