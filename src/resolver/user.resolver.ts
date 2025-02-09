@@ -14,11 +14,12 @@ import { LoginInput, RegisterInput } from "../types/inputs/user.input.js";
 import MyContext from "../types/myContext.js";
 import { Assert } from "../utils/assert.js";
 import { AppErrors } from "../utils/custom_error.js";
+import { getRedisClient } from "../utils/redis.js";
 
 @Resolver(User)
 class UserResolver {
   constructor(private userService: UserService) {
-    this.userService = new UserService();
+    this.userService = new UserService(getRedisClient());
   }
 
   // QUERIES ------------------------------------------------------------
@@ -49,9 +50,14 @@ class UserResolver {
 
   // MUTATIONS ------------------------------------------------------------
 
-  @Mutation(() => User)
+  @Mutation(() => String)
   register(@Arg("input") input: RegisterInput) {
     return this.userService.register(input);
+  }
+
+  @Mutation(() => String)
+  async verifyEmail(@Arg("uuid") uuid: string): Promise<string> {
+    return this.userService.verifyEmail(uuid);
   }
 
   @Mutation(() => String) // jwt
@@ -61,7 +67,6 @@ class UserResolver {
 
   //TODO: deleteMe @Authorized
   //TODO: resetPassword(newPassword)
-  //TODO: verifyEmail - through email button
 }
 
 export default UserResolver;

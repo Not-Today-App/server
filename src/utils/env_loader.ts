@@ -4,6 +4,8 @@ dotenv.config();
 export const config = {
   NODE_ENV: process.env.NODE_ENV,
   MONGO_URI: process.env.MONGO_URI,
+  SERVER_URL: process.env.SERVER_URL,
+
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   PUBLIC_KEY: process.env.PUBLIC_KEY,
 
@@ -12,6 +14,11 @@ export const config = {
   SMTP_HOST: process.env.SMTP_HOST,
   SMTP_PORT: process.env.SMTP_PORT,
   SMTP_SECURE: process.env.SMTP_SECURE,
+
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT,
+  REDIS_USERNAME: process.env.REDIS_USERNAME,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 };
 
 export function validateConfigVariables() {

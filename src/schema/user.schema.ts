@@ -8,15 +8,6 @@ export enum UserRoles {
   SUPER_ADMIN = "SUPER_ADMIN",
 }
 
-// Hash password
-@pre<User>("save", async function () {
-  if (!this.isModified("password")) {
-    return;
-  }
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(this.password, salt);
-  this.password = hash;
-})
 @ObjectType()
 export class User extends TimeStamps {
   @Field(() => ID)
@@ -38,11 +29,16 @@ export class User extends TimeStamps {
   @prop({ default: false })
   isEmailVerified: boolean;
 
-  @prop({ required: true, minlength: 8, maxlength: 30 })
+  @prop({ required: true, minlength: 8 })
   password: string;
 
   @prop({ enum: UserRoles, default: UserRoles.APPLICATION_USER })
   role: UserRoles;
+
+  static async hashPassword(plainPassword: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(plainPassword, salt);
+  }
 
   static async comparePassword(
     plainPassword: string,

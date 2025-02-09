@@ -6,7 +6,14 @@ services:
     image: mongo:latest
     restart: always
     volumes:
-    - mongo_data:/data/db
+      - mongo_data:/data/db
+
+  redis:
+    container_name: redis_container
+    image: redis:latest
+    ports:
+      - 5002:6379
+    restart: always
 
   app:
     container_name: api_container
@@ -17,8 +24,10 @@ services:
       NODE_ENV: ${NODE_ENV}
       SERVER_URL: ${SERVER_URL}
       MONGO_URI: mongodb://database_container:27017/not-today
+      REDIS_HOST: redis_container  # Use the Redis service name as the host
+      REDIS_PORT: 6379  # Default Redis port
       PRIVATE_KEY: ${PRIVATE_KEY}
-      PUBLIC_KEY: ${PUBLIC_KEY}
+      PUBLIC_KEY: ${PRIVATE_KEY}
       SMTP_USER: ${SMTP_USER}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_HOST: ${SMTP_HOST}
@@ -26,6 +35,7 @@ services:
       SMTP_SECURE: ${SMTP_SECURE}
     depends_on:
       - mongo_db
+      - redis
 
 volumes:
   mongo_data: {}

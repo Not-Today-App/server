@@ -16,6 +16,7 @@ import {
   prepopulateLevels,
 } from "./utils/pre_populate.js";
 import { resolvers } from "./resolver/index.js";
+import { getRedisClient } from "./utils/redis.js";
 
 async function bootstrap() {
   const schema = await buildSchema({
@@ -62,6 +63,7 @@ async function bootstrap() {
   );
   console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 
+  getRedisClient();
   connectToMongo();
   prepopulateLevels();
   prepopulateAddictions();

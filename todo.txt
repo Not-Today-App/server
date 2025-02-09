@@ -1,0 +1,9 @@
+1. bind mounting for real time updated on container not working:
+    volumes:
+        - .:/app
+
+2. all the missing user resolvers
+
+3. pfp image upload
+
+etc.

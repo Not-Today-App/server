@@ -17,6 +17,7 @@ export enum AppErrors {
   "INVALID_LEVEL" = "INVALID_LEVEL",
   "ALREADY_HAVE_ADDICTION" = "ALREADY_HAVE_ADDICTION",
   "INVALID_ADDICTION" = "INVALID_ADDICTION",
+  "REDIS_ERROR" = "REDIS_ERROR",
 }
 
 export class AppError extends GraphQLError {
