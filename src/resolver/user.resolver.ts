@@ -33,20 +33,13 @@ class UserResolver {
   @Authorized()
   @Query(() => User, { nullable: true })
   async me(@Ctx() context: MyContext) {
-    const user = await UserModel.findById(context.user._id).lean();
-    Assert.isTrue(!!user, "User not found", AppErrors.USER_NOT_FOUND);
-    return user;
+    return this.userService.me(context);
   }
 
   @Query(() => Int)
   countUsers() {
     return this.userService.count();
   }
-
-  /*  @Query()
-  verifyEmail() {
-    return this.userService.verifyEmail();
-  } */
 
   // MUTATIONS ------------------------------------------------------------
 

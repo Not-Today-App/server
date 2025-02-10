@@ -6,4 +6,6 @@
 
 3. pfp image upload
 
+5. add cookies on login not just give the token.
+
 etc.

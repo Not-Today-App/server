@@ -27,7 +27,7 @@ services:
       REDIS_HOST: redis_container  # Use the Redis service name as the host
       REDIS_PORT: 6379  # Default Redis port
       PRIVATE_KEY: ${PRIVATE_KEY}
-      PUBLIC_KEY: ${PRIVATE_KEY}
+      PUBLIC_KEY: ${PUBLIC_KEY}
       SMTP_USER: ${SMTP_USER}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_HOST: ${SMTP_HOST}

@@ -17,6 +17,7 @@ import {
 } from "./utils/pre_populate.js";
 import { resolvers } from "./resolver/index.js";
 import { getRedisClient } from "./utils/redis.js";
+import { setupGoogleOAuthRoutes } from "./oauth/google.oauth.js";
 
 async function bootstrap() {
   const schema = await buildSchema({
@@ -26,6 +27,8 @@ async function bootstrap() {
   });
 
   const app = express();
+
+  setupGoogleOAuthRoutes(app);
 
   // "Drain" server (gracefully shut it down)
   const httpServer = http.createServer(app);
@@ -61,7 +64,7 @@ async function bootstrap() {
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 3000 }, resolve)
   );
-  console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+  console.log(`🚀 Server ready at http://localhost:4000/graphql`); // docker forwards to port 4000
 
   getRedisClient();
   connectToMongo();

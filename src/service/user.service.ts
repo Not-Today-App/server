@@ -9,8 +9,6 @@ import { generateVerificationEmail } from "../mail/verify_account.js";
 import nodemailer from "nodemailer";
 import { config } from "../utils/env_loader.js";
 import { v4 as uuidv4 } from "uuid";
-import { getRedisClient } from "../utils/redis.js";
-import bcrypt from "bcrypt";
 import Redis from "ioredis";
 
 class UserService {
@@ -125,6 +123,12 @@ class UserService {
     return token;
 
     //TODO: Cookies I will need context for that
+  }
+
+  async me(context: MyContext) {
+    const user = await UserModel.findById(context.user._id).lean();
+    Assert.isTrue(!!user, "User not found", AppErrors.USER_NOT_FOUND);
+    return user;
   }
 
   async findByEmail(email: string) {
