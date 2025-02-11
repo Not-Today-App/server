@@ -2,24 +2,34 @@ import {
   Arg,
   Authorized,
   Ctx,
+  Field,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
 } from "type-graphql";
 
 import UserService from "../service/user.service.js";
 import { User, UserModel } from "../schema/user.schema.js";
-import { LoginInput, RegisterInput } from "../types/inputs/user.input.js";
+import { LoginInput, RegisterInput } from "../types/inputs/auth.input.js";
 import MyContext from "../types/myContext.js";
-import { Assert } from "../utils/assert.js";
-import { AppErrors } from "../utils/custom_error.js";
 import { getRedisClient } from "../utils/redis.js";
+import { clearAuthCookies } from "../utils/cookies.js";
+
+@ObjectType()
+export class LoginResponse {
+  @Field()
+  accessToken: string;
+
+  @Field()
+  refreshToken: string;
+}
 
 @Resolver(User)
 class UserResolver {
   constructor(private userService: UserService) {
-    this.userService = new UserService(getRedisClient());
+    this.userService = new UserService();
   }
 
   // QUERIES ------------------------------------------------------------
@@ -43,23 +53,7 @@ class UserResolver {
 
   // MUTATIONS ------------------------------------------------------------
 
-  @Mutation(() => String)
-  register(@Arg("input") input: RegisterInput) {
-    return this.userService.register(input);
-  }
-
-  @Mutation(() => String)
-  async verifyEmail(@Arg("uuid") uuid: string): Promise<string> {
-    return this.userService.verifyEmail(uuid);
-  }
-
-  @Mutation(() => String) // jwt
-  login(@Arg("input") input: LoginInput, @Ctx() context: MyContext) {
-    return this.userService.login(input, context);
-  }
-
   //TODO: deleteMe @Authorized
-  //TODO: resetPassword(newPassword)
 }
 
 export default UserResolver;

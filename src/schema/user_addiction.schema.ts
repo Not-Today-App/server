@@ -25,7 +25,7 @@ export class UserAddiction extends TimeStamps {
   @prop()
   timeSpentPerDay?: number; // Store as total minutes (e.g., 105 for 1h45)
 
-  //TODO: In future make this property @authrozied, due to needing to be a premium user
+  //TODO: In future make this property @authorized, due to needing to be a premium user
   @Field(() => [String], { nullable: true })
   @prop({ type: () => [String], default: [] }) // list of images
   motivation?: string[];

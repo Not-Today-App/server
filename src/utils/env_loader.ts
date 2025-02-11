@@ -9,6 +9,9 @@ export const config = {
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   PUBLIC_KEY: process.env.PUBLIC_KEY,
 
+  ACCESS_TOKEN_TTL: process.env.ACCESS_TOKEN_TTL,
+  REFRESH_TOKEN_TTL: process.env.REFRESH_TOKEN_TTL,
+
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
   SMTP_HOST: process.env.SMTP_HOST,

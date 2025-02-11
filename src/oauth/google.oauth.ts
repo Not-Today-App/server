@@ -8,6 +8,7 @@ import { Assert } from "../utils/assert.js";
 import { AppErrors } from "../utils/custom_error.js";
 import { UserModel } from "../schema/user.schema.js";
 import { config } from "../utils/env_loader.js";
+import { reIssueAccessToken } from "../utils/cookies.js";
 
 interface GoogleUserPayload {
   email: string;
@@ -64,7 +65,8 @@ export function setupGoogleOAuthRoutes(app: express.Application) {
 
       // TODO: create a session
 
-      // TODO: create access and refresh tokens
+      // Cceate access & refresh tokens
+      await reIssueAccessToken(user, res);
 
       // TODO: Set cookies
 

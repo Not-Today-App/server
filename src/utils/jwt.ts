@@ -1,6 +1,13 @@
 import { config } from "./env_loader.js";
 import jwt from "jsonwebtoken";
 
+export interface VerifyJwtResult {
+  decoded?: {
+    _id: string;
+    role: string;
+  };
+}
+
 const privateKey = Buffer.from(config.PRIVATE_KEY, "base64").toString("ascii");
 const publicKey = Buffer.from(config.PUBLIC_KEY, "base64").toString("ascii");
 

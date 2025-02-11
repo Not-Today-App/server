@@ -12,7 +12,7 @@ import UserAddictionService from "../service/user_addiction.service.js";
 
 @Authorized()
 @Resolver()
-export class UserAddictionResolver {
+class UserAddictionResolver {
   constructor(private userAddictionService: UserAddictionService) {
     this.userAddictionService = new UserAddictionService();
   }
@@ -58,3 +58,5 @@ export class UserAddictionResolver {
     return this.userAddictionService.delete(input, context);
   }
 }
+
+export default UserAddictionResolver;

@@ -4,13 +4,11 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import http from "http";
 import cors from "cors";
-import express from "express";
+import express, { Request, Response } from "express";
 import MyContext from "./types/myContext.js";
 import { buildSchema } from "type-graphql";
 import { authChecker } from "./utils/auth_checker.js";
 import { connectToMongo } from "./utils/mongo.js";
-import { verifyJwt } from "./utils/jwt.js";
-import { User } from "./schema/user.schema.js";
 import {
   prepopulateAddictions,
   prepopulateLevels,
@@ -18,6 +16,8 @@ import {
 import { resolvers } from "./resolver/index.js";
 import { getRedisClient } from "./utils/redis.js";
 import { setupGoogleOAuthRoutes } from "./oauth/google.oauth.js";
+import { getUserFromToken } from "./utils/cookies.js";
+import cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const schema = await buildSchema({
@@ -43,23 +43,25 @@ async function bootstrap() {
   // Mount Apollo Server middleware to the /graphql path
   app.use(
     "/graphql",
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>({
+      origin: "http://localhost:3000/graphql", // TODO: in future use local host from front end (from config)
+      credentials: true,
+    }),
     express.json(),
+    cookieParser(),
     expressMiddleware(server, {
-      context: async (ctx: MyContext) => {
-        const token = ctx.req.headers.authorization;
-
-        if (token) {
-          const tokenValue = token.replace("Bearer ", "").trim();
-          const user = verifyJwt<User>(tokenValue);
-          ctx.user = user;
-        }
-
-        return ctx;
+      context: async ({
+        req,
+        res,
+      }: {
+        req: Request;
+        res: Response;
+      }): Promise<MyContext> => {
+        const user = await getUserFromToken(req, res);
+        return { req, res, user }; // Returns the full context
       },
     })
   );
-
   // Modified server startup with graceful shutdown
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 3000 }, resolve)

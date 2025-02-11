@@ -4,7 +4,7 @@ import { User } from "../schema/user.schema.js";
 interface MyContext {
   req: Request;
   res: Response;
-  user?: Partial<User>;
+  user?: Partial<User> | null;
 }
 
 export default MyContext;
