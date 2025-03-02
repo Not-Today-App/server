@@ -65,6 +65,9 @@ export class Diary extends TimeStamps {
   @Field(() => DiaryMood)
   @prop({ enum: DiaryMood, default: DiaryMood.NEUTRAL })
   mood: DiaryMood;
+
+  @Field(() => Date)
+  createdAt: Date;
 }
 
 export const DiaryModel = getModelForClass(Diary);

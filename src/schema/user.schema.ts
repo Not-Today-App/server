@@ -35,6 +35,9 @@ export class User extends TimeStamps {
   @prop({ enum: UserRoles, default: UserRoles.APPLICATION_USER })
   role: UserRoles;
 
+  @Field(() => Date)
+  createdAt: Date;
+
   static async hashPassword(plainPassword: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
     return await bcrypt.hash(plainPassword, salt);

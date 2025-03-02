@@ -6,6 +6,6 @@
 
 3. pfp image upload
 
-5. add cookies on login not just give the token.
+5. verify cookies etc in google oauth
 
 etc.
